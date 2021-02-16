@@ -1,0 +1,70 @@
+@model CleanWebApp.Components.CalendarModel
+
+<div class="field">
+    @if (Model.Label != "")
+    {
+        <label class="field__label control-label">@Model.Label</label>
+    }
+    <div class="field__group field__group--calendar input-group-append">
+        <input class="field__calendar form-control datepicker" asp-for="@Model.Name" id="@Model.Id" name="@Model.Name" required="@Model.Required" type="text" value="@Model.Value">
+        <span class="far fa-calendar-alt field__icon"></span>
+    </div>
+    <span class="field__message field-validation-valid" data-valmsg-for="@Model.Name" data-valmsg-replace="true"></span>
+</div>
+
+
+@section Head {
+
+    <style>
+        .ui-widget-header .ui-icon {
+            background-image: url('/vendor/jquery-ui/images/ui-icons_444444_256x240.png');
+        }
+
+        .field__group {
+            position: relative;
+        }
+
+        .field__group--calendar .field__icon {
+            cursor: pointer;
+        }
+
+        .field__icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .field__message {
+            display: block;
+        }
+    </style>
+
+}
+
+@section Scripts {
+    <script at="Foot">(function ($) {
+            window['script'] = {
+                default: function () {
+                    $(".datepicker").datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "dd/M/yy"
+                    });
+                },
+                buttonIcon: function () {
+                    $(".field__icon").on("click", function () {
+                        if ($(".ui-datepicker").css("display") === "none") {
+                            $(this).prev().focus();
+                        } else {
+                            $(this).prev().blur();
+                        }
+                    });
+                },
+                init: function () {
+                    script.default();
+                    script.buttonIcon();
+                }
+            }; $(script.init);
+        })(jQuery);</script>
+}

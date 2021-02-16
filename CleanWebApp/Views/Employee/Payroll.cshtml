@@ -1,0 +1,78 @@
+﻿@using CA.WebApp.ViewModels
+@model EmployeePayrollViewModel
+@{
+    ViewData["Title"] = "Calculate Payroll Page";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Employee">Employee</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Calculate Payroll</li>
+    </ol>
+</nav>
+@Html.AntiForgeryToken()
+
+
+<div class="card bg-light mb-3">
+    <div class="card-header"><h1>Calculate Payroll</h1></div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            
+            <div class="form-group">
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.employee.Name)
+                <label class="control-label">NAME</label>
+                @Html.Label("Name", Model.employee.Name, new { @class = "form-control", @id = "lblCommision", @style = "background-color:silver" })
+            </div>
+            <div class="form-group">
+                <label class="control-label">TIN</label>
+                @Html.Label("TIN", Model.employee.TIN, new { @class = "form-control", @id = "lblCommision", @style = "background-color:silver" })
+            </div>
+            @if (Model.employee.EmployeeType.Id == 1)
+            {
+                <div class="form-group">
+                    <label class="control-label">Absent(s)</label>
+                    @Html.EditorFor(m => m.Absent)
+                    @Html.ValidationMessageFor(m => m.Absent, "", new { @class = "text-danger" })
+                </div>
+            }
+            @if (Model.employee.EmployeeType.Id == 2)
+            {
+                <div class="form-group">
+                    <label class="control-label">Working Day(s)</label>
+                    @Html.EditorFor(m => m.WorkingDays)
+                    @Html.ValidationMessageFor(m => m.WorkingDays, "", new { @class = "text-danger" })
+                </div>
+            }
+            <div class="form-group">
+                <label class="control-label">Salary Amount</label>
+                @Html.Label("Salary", Model.SalaryAmount.ToString("#,###.00"), new { @class = "form-control", @id = "lblSalary", @style = "background-color:silver" })
+            </div>
+
+            <button type="submit" id="btnSubmit" class="btn btn-primary btn-sm mr-sm-2">Calculate Payroll</button>
+            @Html.ActionLink("CANCEL", "Index", new { id = Model.employee.Id }, new { @id = "btnCancel", @class = "btn btn-danger btn-sm mr-sm-2" })
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" at="Foot">
+    
+        $(function () {
+            calculateDiscountCommision();
+            $('#Absent').on('input propertychange paste', function () {
+                calculatePayroll();
+            });
+            $('#WrokingDays').on('input propertychange paste', function () {
+                calculatePayroll();
+            });
+            
+            function calculatePayroll() {
+                if(@Model.)
+            }
+
+        });</script>
+
+}
+

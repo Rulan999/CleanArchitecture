@@ -1,0 +1,96 @@
+﻿@using CA.WebApp.ViewModels
+@model EmployeeUpdateViewModel
+@{
+    ViewData["Title"] = "Create Employee Page";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Employee">Employee</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update Employee</li>
+    </ol>
+</nav>
+@Html.AntiForgeryToken()
+
+
+<div class="card bg-light mb-3">
+    <div class="card-header"><h1>Update Employee</h1></div>
+    <div class="card-body">
+        <form id="formCreate">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.HiddenFor(m => m.Item.Id, new { id = "Id" })
+                <label class="control-label">NAME</label>
+                @Html.TextBoxFor(m => m.Item.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Item.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(p => p.Item.BirthDate, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control mr-sm-2 my-2 my-lg-0" })
+                @Html.ValidationMessageFor(m => m.Item.BirthDate, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                <label class="control-label">TIN</label>
+                @Html.TextBoxFor(m => m.Item.TIN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Item.TIN, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label class="control-label">EMPLOYEE TYPE</label>
+                @Html.DropDownListFor(m => m.Item.EmployeeTypeId, new SelectList(Model.EmployeeTypeList, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "EmployeeTypeId" })
+
+            </div>
+            <button id="btnSubmit" class="btn btn-primary btn-sm mr-sm-2">SAVE</button>
+            @Html.ActionLink("CANCEL", "Index", new { id = Model.Item.Id }, new { @id = "btnCancel", @class = "btn btn-danger btn-sm mr-sm-2" })
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script at="Foot">$(function () {
+
+            $("#formCreate").submit(function (e) {
+                e.preventDefault();
+                if ($(".field-validation-error").length == 0) {
+                    $("#overlay").fadeIn(300);
+                    SaveData();
+                }
+            });
+
+            function SaveData() {
+                var Id = $("#Id").val();
+                var Name = $("#Item_Name").val();
+                var Tin = $("#Item_TIN").val();
+                var EmployeeTypeId = $("[id*='EmployeeTypeId'] :selected").val();
+                var BirthDate = $("#Item_BirthDate").val();
+
+                $.ajax({
+                    url: "/Employee/Update",
+                    type: 'Post',
+                    headers:
+                    {
+                        "RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
+                    },
+                    data: {
+                        Item: {
+                            "Id": Id,
+                            "Name": Name,
+                            "Tin": Tin,
+                            "EmployeeTypeId": EmployeeTypeId,
+                            "BirthDate": BirthDate
+                        }
+                    },
+                    success: function (result) {
+                        window.location.href = window.location.origin + "/Employee/Index/";
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage);
+                    },
+                    complete: function (jqXHR, status) {
+                        $("#overlay").fadeOut(300);
+                    }
+                });
+            }
+
+
+        });</script>
+    }

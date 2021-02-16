@@ -1,0 +1,77 @@
+﻿@using CA.WebApp.ViewModels
+@model SearchEmployeeViewModel
+@{
+    ViewData["Title"] = "Manage Employee Page";
+}
+
+@section Head {
+}
+
+<h1>Manage Employee</h1>
+
+<nav class="admin-toolbar">
+
+    <form asp-action="Index" method="get" class="form-inline">
+        <div class="px-1">
+            @Html.TextBoxFor(p => p.input.Name, new { placeholder = "Search", autofocus = "autofocus", @class = "form-control my-2 my-lg-0" })
+        </div>
+        <div class="px-1">
+            <button type="submit" id="btnSearch" class="btn btn-outline-secondary ">Search</button>
+            <a asp-route-action="Create" id="btnAdd" class="btn btn-outline-primary " role="button">Add New</a>
+        </div>
+    </form>
+</nav>
+
+
+@using (Html.BeginForm())
+{
+    @if (Model.output.Employees.Any())
+    {
+        <div class="table-responsive-sm">
+            <table class="table table-striped" summary="Deals">
+                <thead>
+                    <tr>
+                        <th id="thId">ID</th>
+                        <th id="thNAme">NAME</th>
+                        <th id="thBirthDate">BIRTHDATE</th>
+                        <th id="thTin">TIN</th>
+                        <th id="thEmployeeType">EMPLOYEE TYPE</th>
+                        <th id="thActions" style="width:250px">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in Model.output.Employees)
+                    {
+                        <tr>
+                            <td>@entry.Id</td>
+                            <td>@entry.Name</td>
+                            <td>@entry.BirthDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@entry.TIN</td>
+                            <td>@entry.EmployeeType.Description</td>
+
+
+                            <td style="text-align: right;">
+                                <div class="related float-right">
+                                    @Html.ActionLink("Payroll", "Payroll", new { id = entry.Id }, new { @id = "btnPayroll", @class = "btn btn-outline-success btn-sm mb-2" })
+                                    @Html.ActionLink("Update", "Update", new { id = entry.Id }, new { @id = "btnUpdate", @class = "btn btn-outline-success btn-sm mb-2" })
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            <strong>Nothing here!</strong> There are no queries for the moment
+        </div>
+    }
+}
+
+
+@section Scripts {
+}
